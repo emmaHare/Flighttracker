@@ -13,4 +13,4 @@
 - User can click on each of the displayed airplanes for more information 
 
 ### API Used: 
-[airlabs.co/docs/flights](https://airlabs.co/docs/flights)
+[aviationstack.com/](https://aviationstack.com/)
