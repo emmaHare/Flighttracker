@@ -3,6 +3,28 @@
     "axios": "^1.8.4",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2"
+  },
+  "name": "flighttracker",
+  "version": "1.0.0",
+  "description": "## An API showcase, created using HTML, CSS and NodeJS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emmaHare/Flighttracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emmaHare/Flighttracker/issues"
+  },
+  "homepage": "https://github.com/emmaHare/Flighttracker#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
