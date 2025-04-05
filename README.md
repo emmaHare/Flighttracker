@@ -1,4 +1,4 @@
-# Flighttracker 
+# MyLibrary 
 
 ## An API showcase, created using HTML, CSS and NodeJS. 
 
@@ -8,9 +8,8 @@
 
 ### Main Functions/Features:
 
-- User can find information about a specific flight, by searching for it via the flightnumber
-- All  current flights in an area are displayed, when that area is searched for
-- User can click on each of the displayed airplanes for more information 
+- User can find information about a specific book, by searching for it via various options
+- User can also get a list of books, filtered by specific features, like authors or first letters
 
 ### API Used: 
-[aviationstack.com/](https://aviationstack.com/)
+[openlibrary.org](https://openlibrary.org/developers/api)
