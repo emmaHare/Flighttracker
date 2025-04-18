@@ -7,9 +7,16 @@
         <title>Books</title>
     </head>
     <body>
-
-        <input type="text" id="search-box" placeholder="Search for a book">
-        <button onclick="searchBooks()">Search</button>   
+        
+        <div class="filters">
+            <button class="filter-btn active" id="filter-title" onclick="setFilter('title')">Title</button>
+            <button class="filter-btn" id="filter-author" onclick="setFilter('author')">Author</button>
+            <button class="filter-btn" id="filter-subject" onclick="setFilter('subject')">Genre</button>
+            <button class="filter-btn" id="filter-subject" onclick="setFilter('year')">Publish Year</button>
+        </div>
+          
+        <input id="search-box" type="text" oninput="autoSuggest()" placeholder="Search for books..." />
+        <button onclick="searchBooks()">Search</button>
 
 
         <div id="debug-output">
