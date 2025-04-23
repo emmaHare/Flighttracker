@@ -1,17 +1,38 @@
-let currentFilter = "title";
+let currentFilter = null;
 
 function setFilter(filterType) {
+  const activeBtn = document.getElementById(`filter-${filterType}`);
+  const isActive = activeBtn.classList.contains("active");
+
+  // If already active, deactivate and reset
+  if (isActive) {
+    activeBtn.classList.remove("active");
+    currentFilter = null;
+    document.getElementById("search-box").placeholder = "Search for books...";
+    getBook();
+    return;
+  }
+
+  // Otherwise, activate new filter
   currentFilter = filterType;
 
-  // highlight selected button
+  // Remove active class from all
   document.querySelectorAll(".filter-btn").forEach(btn =>
     btn.classList.remove("active")
   );
 
-  //add active class to the selected one 
-  document.getElementById(`filter-${filterType}`).classList.add("active");
+  // Add to clicked
+  activeBtn.classList.add("active");
 
-  // trigger auto-suggestion if input has value
+  // Update placeholder
+  const placeholderMap = {
+    title: "Search for book titles...",
+    author: "Search for authors...",
+    year: "Search by publish year..."
+  };
+  document.getElementById("search-box").placeholder = placeholderMap[filterType] || "Search for books...";
+
+  // Trigger fetch if input exists
   const input = document.getElementById("search-box").value.trim();
   if (input) {
     getBook(input);
