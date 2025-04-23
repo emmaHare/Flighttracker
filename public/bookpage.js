@@ -105,6 +105,10 @@ function getBook(searchTerm = "harry potter") {
 
         bookDiv.appendChild(textDiv);
 
+        bookDiv.addEventListener("click", () => {
+          showModal(book);
+        })
+
         if (coverUrl) {
           const imgEl = document.createElement("img");
           imgEl.className = "book-cover";
@@ -188,7 +192,36 @@ function autoSuggest() {
     });
 }
 
+function showModal(book) {
+  const modal = document.getElementById("book-modal");
+  const modalDetails = document.getElementById("modal-details");
+
+  const title = book.title || "No title";
+  const authors = book.author_name ? book.author_name.join(", ") : "Unknown author";
+  const year = book.first_publish_year || "N/A";
+  const subjects = book.subject ? book.subject.join(", ") : "N/A";
+  const coverId = book.cover_i;
+  const coverUrl = coverId
+    ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`
+    : "";
+
+  modalDetails.innerHTML = `
+    <h2>${title}</h2>
+    <p><strong>Author(s):</strong> ${authors}</p>
+    <p><strong>First Published:</strong> ${year}</p>
+    <p><strong>Subjects:</strong> ${subjects}</p>
+    ${coverUrl ? `<img src="${coverUrl}" alt="Cover of ${title}" style="max-width:100%; margin-top: 1rem;">` : ""}
+  `;
+
+  modal.classList.remove("hidden");
+}
+
+function closeModal() {
+  document.getElementById("book-modal").classList.add("hidden");
+}
+
 // Run on load
 window.onload = function () {
   getBook();
+  
 };
