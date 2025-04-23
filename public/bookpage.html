@@ -7,22 +7,27 @@
         <title>Books</title>
     </head>
     <body>
-        
-        <div class="filters">
-            <button class="filter-btn active" id="filter-title" onclick="setFilter('title')">Title</button>
-            <button class="filter-btn" id="filter-author" onclick="setFilter('author')">Author</button>
-            <button class="filter-btn" id="filter-subject" onclick="setFilter('subject')">Genre</button>
-            <button class="filter-btn" id="filter-subject" onclick="setFilter('year')">Publish Year</button>
-        </div>
-          
-        <input id="search-box" type="text" oninput="autoSuggest()" placeholder="Search for books..." />
-        <button onclick="searchBooks()">Search</button>
 
-
-        <div id="debug-output">
-            <pre id="book-output">Loading...</pre>
-        </div>
-
+        <header>
+            <a href="index.html"><h1>MyLibrary</h1></a>
+            <div class="search">
+                <div class="filters">
+                    <button class="filter-btn" id="filter-title" onclick="setFilter('title')">Title</button>
+                    <button class="filter-btn" id="filter-author" onclick="setFilter('author')">Author</button>
+                    <button class="filter-btn" id="filter-year" onclick="setFilter('year')">Publish Year</button>
+                </div>
+                <div class="search-input">
+                    <input id="search-box" type="text" oninput="autoSuggest()" placeholder="Search for books..." />
+                    <button onclick="searchBooks()">Search</button>
+                </div>
+                <ul id="suggestions" class="suggestion-list"></ul>
+            </div>
+        </header>
+        <main>
+            <div id="debug-output">
+                <pre id="book-output" class="book-output">Loading...</pre>
+            </div>
+        </main>
         <script src="bookpage.js"></script>
     </body>
 </html>

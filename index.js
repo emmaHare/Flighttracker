@@ -20,7 +20,7 @@ app.get("/api", async (req, res) => {
     } else if (author) {
       url = `https://openlibrary.org/search.json?author=${encodeURIComponent(author)}`;
     } else if (publish_year) {
-      url = `https://openlibrary.org/search.json?first_publish_year=${encodeURIComponent(publish_year)}`;
+      url = `https://openlibrary.org/search.json?q=${encodeURIComponent(publish_year)}`;
     } else if (subject) {
       isSubjectSearch = true;
       url = `https://openlibrary.org/subjects/${encodeURIComponent(subject.toLowerCase())}.json`;

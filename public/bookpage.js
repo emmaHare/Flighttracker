@@ -7,6 +7,8 @@ function setFilter(filterType) {
   document.querySelectorAll(".filter-btn").forEach(btn =>
     btn.classList.remove("active")
   );
+
+  //add active class to the selected one 
   document.getElementById(`filter-${filterType}`).classList.add("active");
 
   // trigger auto-suggestion if input has value
@@ -36,11 +38,6 @@ function getBook(searchTerm = "harry potter") {
             author.toLowerCase().startsWith(term)
           );
         }
-        if (currentFilter === "subject") {
-          return (book.subject || []).some(subject =>
-            subject.toLowerCase().startsWith(term)
-          );
-        }
         if (currentFilter === "year") {
           const year = book.first_publish_year?.toString() || "";
           return year.startsWith(term);
@@ -65,28 +62,27 @@ function getBook(searchTerm = "harry potter") {
         const bookDiv = document.createElement("div");
         bookDiv.className = "book-card";
 
+        const textDiv = document.createElement("div");
+        textDiv.className = "text-part"
+
         const titleEl = document.createElement("h3");
         titleEl.className = "book-title";
         titleEl.textContent = title;
-        bookDiv.appendChild(titleEl);
+        titleEl.title = title;
+        textDiv.appendChild(titleEl);
 
         const authorEl = document.createElement("p");
         authorEl.className = "book-author";
         authorEl.innerHTML = `<strong>Author:</strong> ${author}`;
-        bookDiv.appendChild(authorEl);
+        authorEl.title = author;
+        textDiv.appendChild(authorEl);
 
         const yearEl = document.createElement("p");
         yearEl.className = "book-year";
         yearEl.innerHTML = `<strong>First Published:</strong> ${year}`;
-        bookDiv.appendChild(yearEl);
+        textDiv.appendChild(yearEl);
 
-        
-        if (book.subject && book.subject.length > 0) {
-          const subjectEl = document.createElement("p");
-          subjectEl.className = "book-subject";
-          subjectEl.innerHTML = `<strong>Subjects:</strong> ${book.subject.slice(0, 5).join(", ")}`;
-          bookDiv.appendChild(subjectEl);
-        }
+        bookDiv.appendChild(textDiv);
 
         if (coverUrl) {
           const imgEl = document.createElement("img");
@@ -95,7 +91,7 @@ function getBook(searchTerm = "harry potter") {
           imgEl.alt = `Cover of ${title}`;
           bookDiv.appendChild(imgEl);
         }
-
+        
         output.appendChild(bookDiv);
       });
     })
@@ -111,8 +107,64 @@ function searchBooks() {
 }
 
 function autoSuggest() {
-  const term = document.getElementById("search-box").value.trim();
-  if (term) getBook(term);
+  const term = document.getElementById("search-box").value.trim().toLowerCase();
+  const suggestionBox = document.getElementById("suggestions");
+  suggestionBox.innerHTML = "";
+
+  if (!term) {
+    suggestionBox.style.display = "none";
+    getBook(); // Reset results
+    return;
+  }
+
+  fetch(`/api?${currentFilter}=${encodeURIComponent(term)}`)
+    .then(res => res.json())
+    .then(data => {
+      const books = data.docs || [];
+      const suggestions = new Set();
+
+      books.forEach(book => {
+        if (currentFilter === "title" && book.title) {
+          suggestions.add(book.title);
+        }
+        if (currentFilter === "author" && book.author_name) {
+          book.author_name.forEach(name => suggestions.add(name));
+        }
+        if (currentFilter === "subject" && book.subject) {
+          book.subject.forEach(sub => suggestions.add(sub));
+        }
+        if (currentFilter === "year" && book.first_publish_year) {
+          suggestions.add(book.first_publish_year.toString());
+        }
+      });
+
+      const filteredSuggestions = Array.from(suggestions)
+      .filter(s => s.toLowerCase().startsWith(term))
+      .sort()
+      .slice(0, 10); // limit to 10 // Limit to 10
+
+      if (filteredSuggestions.length === 0) {
+        suggestionBox.style.display = "none";
+        return;
+      }
+      
+      filteredSuggestions.forEach(suggestion => {
+        const li = document.createElement("li");
+        li.textContent = suggestion;
+        li.onclick = () => {
+          document.getElementById("search-box").value = suggestion;
+          suggestionBox.style.display = "none";
+          getBook(suggestion);
+        };
+        suggestionBox.appendChild(li);
+      });
+
+      suggestionBox.style.display = "block";
+    })
+    .catch(err => {
+      console.error("Suggestion fetch error:", err);
+      suggestionBox.style.display = "none";
+    });
 }
 
 // Run on load
